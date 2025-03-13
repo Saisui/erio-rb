@@ -17,12 +17,12 @@ class App < Erio
   enter do
     status 200
     header content_type: 'html'
-    if accept? 'image'
+    if accept? 'image' and not accept? %w[text application]
       send_file '/public'+path
     elsif path? '/'
       '<h1>Hello, Erio!</h1>'
     elsif query? id: 1
-      header content_type: 'json'
+      content_type 'json'
       { id: 1, name: 'Touwa Erio', country: 'Japan' }.to_json
     else
       status 404
