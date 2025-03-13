@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module Erio
-  VERSION = "0.0.0"
+class Erio
+  VERSION = "0.0.0-1"
 end

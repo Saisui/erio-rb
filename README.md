@@ -14,10 +14,12 @@ gem install erio
 require 'erio'
 
 class App < Erio
-  middle do
+  enter do
     status 200
     header content_type: 'html'
-    if path? '/'
+    if accept? 'image'
+      send_file '/public'+path
+    elsif path? '/'
       '<h1>Hello, Erio!</h1>'
     elsif query? id: 1
       header content_type: 'json'
