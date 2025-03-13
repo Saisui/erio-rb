@@ -21,7 +21,8 @@ class << Erio
     @header = {}
     @status = nil
     @body = nil
-    @body ||= enter || ''
+    last_res = enter
+    @body ||= last_res || ''
     [@status, @header, [@body]]
   end
 
