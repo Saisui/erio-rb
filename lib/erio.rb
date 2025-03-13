@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "erio/version"
+require_relative "erio/short"
 require'rack'
 require'rack/handler/puma'
 
@@ -21,7 +22,7 @@ class << Erio
     @status = nil
     @body = nil
     @body ||= enter || ''
-    [@status,@header,[@body]]
+    [@status, @header, [@body]]
   end
 
   def call env
