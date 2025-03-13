@@ -36,5 +36,4 @@ class << Erio
 
   def []  key; instance_variable_get :"@#{key}" end
   def []= key, value; instance_variable_set :"@#{key}", value end
-
 end
