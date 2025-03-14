@@ -55,7 +55,7 @@ class << Erio
   end
 
   def ip? cond, &block
-    bool = url === @_env['REMOTE_ADDR']
+    bool = cond === @_env['REMOTE_ADDR']
     return bool unless bool && block
     block.call
   end
