@@ -4,6 +4,7 @@ class << Erio
   def req_body; @_env['rack.input'].read end
   def req_scheme; @_env['rack.url_scheme'] end
   def req_host; @_env['HTTP_HOST'] end
+  def query; @_env['QUERY_STRING'] end
 
   def decode_www str
     str.gsub('+','%2B').gsub(/%([\da-fA-F]{2})/) { $1.to_i(16).chr }
