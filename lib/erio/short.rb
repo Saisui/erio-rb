@@ -41,9 +41,9 @@ class << Erio
   end
 
   def request; Rack::Request.new(@_env) end
-  def header(**kws); kws.empty? ? @header : @header.merge!(kws.to_a.map { [_1.to_s.gsub('_','-'),_2] }.to_h) end
-  def status(s=nil); s ? @status=s : @status end
-  def path; @_env['PATH_INFO'] end
+  def header **kws; kws.empty? ? @header : @header.merge!(kws.to_a.map { [_1.to_s.tr('_','-'),_2] }.to_h) end
+  def status s=nil; s ? @status=s : @status end
+  def path; @_env['REQUEST_PATH'] end
   def path? pattern=nil; block_given? ? (yield if pattern === path) : path end
   def verb word=nil; block_given? ? (yield if verb == word) : @_env['REQUEST_METHOD'] end
   def body str=nil; str ? @body=str : @body end
@@ -62,13 +62,13 @@ class << Erio
   end
 
   def header? **kws, &block
-    bool = kws.keys.map { kws[_1] === @header[_1] ? return false : true }.all?
+    bool = kws.keys.map { k=_1.to_s.tr('_','-'); kws[k] === @header[k] ? return false : true }.all?
     return bool unless bool && block
     block.call
   end
 
   def host? url, &block
-    bool = url === env['HOST']
+    bool = url === env['HTTP_HOST']
     return bool unless bool && block
     block.call
   end
