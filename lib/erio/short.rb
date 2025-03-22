@@ -1,10 +1,10 @@
 class << Erio
-  def ip; @_env['REMOTE_ADDR'] end
-  def user_agent; @_env['HTTP_USER_AGENT'] end
-  def req_body; @_env['rack.input'].read end
-  def req_scheme; @_env['rack.url_scheme'] end
-  def req_host; @_env['HTTP_HOST'] end
-  def query; @_env['QUERY_STRING'] end
+  def ip; @env['REMOTE_ADDR'] end
+  def user_agent; @env['HTTP_USER_AGENT'] end
+  def req_body; @env['rack.input'].read end
+  def req_scheme; @env['rack.url_scheme'] end
+  def req_host; @env['HTTP_HOST'] end
+  def query; @env['QUERY_STRING'] end
 
   def decode_www str
     str.gsub('+','%2B').gsub(/%([\da-fA-F]{2})/) { $1.to_i(16).chr }
@@ -14,7 +14,7 @@ class << Erio
   end
 
   def queries q_str=nil
-    (q_str || @_env['QUERY_STRING']).split('&')
+    (q_str || @env['QUERY_STRING']).split('&')
     .map { k,v = [*_1.split('='),''][0,2]; [k, decode_www(v)] }.to_h
   end
 
@@ -40,14 +40,14 @@ class << Erio
     File.binread filename
   end
 
-  def request; Rack::Request.new(@_env) end
+  def req; Rack::Request.new(@env) end
   def header **kws; kws.empty? ? @header : @header.merge!(kws.to_a.map { [_1.to_s.tr('_','-'),_2] }.to_h) end
   def status s=nil; s ? @status=s : @status end
-  def path; @_env['REQUEST_PATH'] end
-  def path? pattern=nil; block_given? ? (yield if pattern === path) : path end
-  def verb word=nil; block_given? ? (yield if verb == word) : @_env['REQUEST_METHOD'] end
+  def path; @env['REQUEST_PATH'] end
+  def path? pattern=nil; block_given? ? (yield if pattern === path) : pattern === path end
+  def verb word=nil; block_given? ? (yield if verb == word) : @env['REQUEST_METHOD'] end
   def body str=nil; str ? @body=str : @body end
-  def accept; @_env['HTTP_ACCEPT'] end
+  def accept; @env['HTTP_ACCEPT'] end
 
   def status? s=200, &block
     bool = s === @status
@@ -56,7 +56,7 @@ class << Erio
   end
 
   def ip? cond, &block
-    bool = cond === @_env['REMOTE_ADDR']
+    bool = cond === @env['REMOTE_ADDR']
     return bool unless bool && block
     block.call
   end
@@ -82,7 +82,7 @@ class << Erio
   end
 
   def accept? *types, &block
-    acc = @_env['HTTP_ACCEPT']
+    acc = @env['HTTP_ACCEPT']
     bool = types.map do |type|
       rt = %r[\b#{type}\b]
       case type

@@ -2,6 +2,7 @@
 
 require_relative "erio/version"
 require_relative "erio/short"
+require_relative "erio/topo"
 require'rack'
 require'rack/handler/puma'
 
@@ -57,17 +58,23 @@ class << Erio
   #
   # @yield run for rack-triad
   # @return [String, Object] maybe response body
-  def enter &blk; blk ? @_enter = blk : @_enter.arity == 1 ? @_enter.call(self) : class_exec(&@_enter) end
-
-  def _call env
-    @_env = env
-    @header = {}
-    @status = nil
-    @body = nil
-    last_res = enter
-    @body ||= last_res || ''
-    [@status, @header, [@body]]
+  def enter(&blk)
+    if blk
+      @_enter = blk
+    else
+      @_enter.arity == 1 ? @_enter.call(self) : class_exec(&@_enter)
+    end
   end
+
+  # def _call env
+  #   @_env = env
+  #   @header = {}
+  #   @status = nil
+  #   @body = nil
+  #   last_res = enter
+  #   @body ||= last_res || ''
+  #   [@status, @header, [@body]]
+  # end
 
   # create a dup to indiv variables scope
   # and call its enter.
