@@ -79,7 +79,7 @@ class << Erio
   # create a dup to indiv variables scope
   # and call its enter.
   # returns rack-triad for rack
-  #
+  
   # @param env
   # @return Array<Numeric, Hash, Array<String>> triad of 
   def call env
