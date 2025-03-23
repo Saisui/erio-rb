@@ -84,8 +84,7 @@ end
 Erio.run!
 ```
 
-### 迷う宮ノ様な回路ニ作ろう :: Nested Page Sugar
-
+### とぽ・迷う宮ノ様な回路ニ作ろう :: `TOPO` - Nested Page Sugar
 
 複雑ノ回路もサポートします。
 同じのコードを繰り返し書き込みの面倒も遠慮なく。
@@ -163,7 +162,14 @@ Erio.run!
 
 #### 実のコードご覧。
 
+先ずは、ジェムに導入する。
 
+```ruby
+require 'erio/topo'
+
+# 簡単文字下記
+require 'erio/kaki'
+```
 <figure cols-2>
 
 回路ニ使える

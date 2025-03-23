@@ -52,8 +52,8 @@ class << Erio
 
     def match(pat)
       case pat
-      when eq(Numeric); path('\\d+(?:\\.\\d+)?').call
-      when eq(Integer); path('\\d+').call
+      when eq(Numeric); path('\\d+(?:\\.\\d+)?').call&.yield_self {|s| s.to_f - s.to_i == 0 ? s.to_i : s.to_f }
+      when eq(Integer); path('\\d+').call&.to_i
       when eq(String); path('[^\\/]+').call
       when String, Numeric; path(pat).call
       when Regexp; path(pat.source).call
@@ -68,17 +68,18 @@ class << Erio
     env['SCRIPT_NAME'], env['PATH_INFO'] = s, p
     @_matched = true
   end
-  # 
+
   # match path excluded rest characters
-  
+  #
   #   is 'hi' # match '/hi' not match '/hi/123'
   #   is 'hi/mine' # match '/hi/mine'
   #
   # @param String, Regexp whole match
   # @yield run if matched
-  def is(s='', &block)
+  def is(*s, &block)
+    s = [''] if s.empty?
     @_isis = true
-    on(s, &block)
+    on(*s, &block)
   end
 
   # matched but also match another for run block
