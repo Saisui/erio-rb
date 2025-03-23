@@ -1,3 +1,10 @@
+<style>
+  /* figure { column-count: 2 } */
+  [cols-2] { column-count: 2 }
+  [cols-3] { column-count: 3 }
+  [cols-4] { column-count: 4 }
+</style>
+
 # エリオ :: Erio
 
 A very chubby, tiny and lightweight Web Framework(base on Rack)
@@ -78,11 +85,116 @@ end
 Erio.run!
 ```
 
+### 迷う宮ノ様な回路ニ作ろう :: Nested Page Sugar
+
+複雑ノ回路もサポートします。
+同じのコードを繰り返し書き込みの面倒も遠慮なく。
+
+<figure cols-2>
+
+回路ニ使える
+
+```ruby
+on 'user'
+  content_type 'html'
+  is do
+    echoln 'userlist...'
+  end
+
+  on Integer do |uid|
+    @uid = uid
+    is do
+      echoln "user: #{uid}"
+    end
+
+    on 'album' do
+      echoln "user #{uid}'s album"
+      is do
+        echoln "pics..."
+        for pic in Dir["asset/user/#{@uid}/*.png"]
+          echoln "<img src=\"#{pic}\">"
+        end
+      end
+
+      is Integer do |pn|
+        echoln "pic #{pn}"
+        echoln "<img src=\"asset/#{@uid}/#{@pn}.png\">"
+      end
+    end
+  end
+end
+```
+
+回路に使えないならば...線性パス
+
+```ruby
+on '/user' do
+  echoln 'userlist...'
+end
+
+on '/user/:uid' do |uid|
+  @uid = uid
+  echoln "user: #{uid}"
+end
+
+on '/user/:uid/album' do |uid|
+  @uid = uid
+  echoln "user #{uid}'s album"
+  echoln "pics..."
+  for pic in Dir["asset/user/#{@uid}/*.png"].map
+    echoln "<img src=\"#{pic}\">"
+  end
+end
+
+on '/user/:uid/album/:pn' do |uid, pn|
+  @uid = uid
+  @pn = pn
+  echoln "user #{uid}'s album"
+  echoln "pic #{pn}"
+  echoln "<img src=\"asset/#{@uid}/#{@pn}.png\">"
+end
+```
+
+</figure>
+
+試験コードご覧ください
+
+```ruby
+
+Erio.enter do
+  # 唯ルト、残されパスは無いノ場合。
+  is do
+    echo 'home'
+  end
+  # 前に合わせてならば... そして引数を取って。
+  on 'user', Integer do |_, uid|
+    # 唯此れニ合わせて
+    is do
+      echo "space of user: #{uid}."
+    end
+    # リクエストのパラメータも取って。
+    is 'album', param(pn: Integer) do |_, pn|
+      content_type 'html'
+      echo "picture of user: #{uid} <img src=\"#{pn}.png\">"
+    end
+  end
+
+  # 後ノ条件も合わせてしたい。
+  also
+
+  # ご報告ニ送りします
+  on param(:warn) do
+    puts "warn #{ip} - #{verb} #{path}"
+  end
+end
+
+```
+
 ## 作ル人 :: Creator
 
 __SAISUI__ :: 彩穂
 
-tip from `rack`, `sinatra`
+tip from `rack`, `sinatra`, `rum`
 
 ## コード協力 :: Contributing
 
