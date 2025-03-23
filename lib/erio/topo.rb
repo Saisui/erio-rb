@@ -55,9 +55,9 @@ class << Erio
       case pat
       when Class
         case pat
-        when eq Numeric; path('\\d+(?:\\.\\d+)?').call
-        when eq Integer; path('\\d+').call
-        when eq String; path('[^\\/]+').call
+        when eq(Numeric); path('\\d+(?:\\.\\d+)?').call
+        when eq(Integer); path('\\d+').call
+        when eq(String); path('[^\\/]+').call
         end
       when String, Numeric; path(pat).call
       when Regexp; path(pat.source).call
