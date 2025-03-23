@@ -3,6 +3,7 @@
 require_relative "erio/version"
 require_relative "erio/short"
 require_relative "erio/topo"
+require_relative "erio/kaki"
 require'rack'
 require'rack/handler/puma'
 
