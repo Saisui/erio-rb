@@ -123,14 +123,15 @@ Erio.run!
 - user
   # 処理 user
   - ''
-      # 処理
+    # 処理·根
   - 123
     # 処理 123
     - ''
-      # 処理
+      # 処理·根
     - album
       # 処理 album
-      # 処理
+      - ''
+        # 処理·根
       - 23
         # 処理 23
 ```
@@ -140,13 +141,16 @@ Erio.run!
 ```yaml
 - /user
   # 処理 user
+  # 処理·根
 - /user/123
   # 処理 user
   # 処理 123
+  # 処理·根
 - /user/123/album
   # 処理 user
   # 処理 123
   # 処理 album
+  # 処理·根
 - /user/123/album/23
   # 処理 user
   # 処理 123
@@ -172,7 +176,6 @@ on 'user'
   end
 
   on Integer do |uid|
-    @uid = uid
     is do
       echoln "user: #{uid}"
     end
@@ -181,14 +184,14 @@ on 'user'
       echoln "user #{uid}'s album"
       is do
         echoln "pics..."
-        for pic in Dir["asset/user/#{@uid}/*.png"]
+        for pic in Dir["asset/user/#{uid}/*.png"]
           echoln "<img src=\"#{pic}\">"
         end
       end
 
       is Integer do |pn|
         echoln "pic #{pn}"
-        echoln "<img src=\"asset/#{@uid}/#{@pn}.png\">"
+        echoln "<img src=\"asset/#{uid}/#{pn}.png\">"
       end
     end
   end
@@ -199,29 +202,29 @@ end
 
 ```ruby
 on '/user' do
+  content_type 'html'
   echoln 'userlist...'
 end
 
 on '/user/:uid' do |uid|
-  @uid = uid
+  content_type 'html'
   echoln "user: #{uid}"
 end
 
 on '/user/:uid/album' do |uid|
-  @uid = uid
+  content_type 'html'
   echoln "user #{uid}'s album"
   echoln "pics..."
-  for pic in Dir["asset/user/#{@uid}/*.png"].map
+  for pic in Dir["asset/user/#{uid}/*.png"].map
     echoln "<img src=\"#{pic}\">"
   end
 end
 
 on '/user/:uid/album/:pn' do |uid, pn|
-  @uid = uid
-  @pn = pn
+  content_type 'html'
   echoln "user #{uid}'s album"
   echoln "pic #{pn}"
-  echoln "<img src=\"asset/#{@uid}/#{@pn}.png\">"
+  echoln "<img src=\"asset/#{uid}/#{pn}.png\">"
 end
 ```
 
