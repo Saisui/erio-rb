@@ -1,10 +1,3 @@
-<style>
-  /* figure { column-count: 2 } */
-  [cols-2] { column-count: 2 }
-  [cols-3] { column-count: 3 }
-  [cols-4] { column-count: 4 }
-</style>
-
 # エリオ :: Erio
 
 A very chubby, tiny and lightweight Web Framework(base on Rack)
@@ -90,6 +83,11 @@ Erio.run!
 複雑ノ回路もサポートします。
 同じのコードを繰り返し書き込みの面倒も遠慮なく。
 
+<style>
+  [cols-2] { column-count: 2 }
+  [cols-3] { column-count: 3 }
+  [cols-4] { column-count: 4 }
+</style>
 <figure cols-2>
 
 回路ニ使える
