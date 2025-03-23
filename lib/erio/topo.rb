@@ -29,8 +29,7 @@ class << Erio
     def path(p)
       if @_isis
         lambda {
-          if env['PATH_INFO'] =~ /\A(\/*#{p}\/*)\z/
-          # if env['PATH_INFO'] =~ /\A\/*\z/
+          if env['PATH_INFO'] =~ /\A\/*(#{p}\/*)\z/
             env['SCRIPT_NAME'] += $1||''
             env['PATH_INFO'] = ''
             $1
@@ -46,19 +45,16 @@ class << Erio
         }
       end
     end
-  
-    def match(pat)
-      def eq obj
-        -> { _1 == obj }
-      end
 
+    def eq obj
+      -> { _1 == obj }
+    end
+
+    def match(pat)
       case pat
-      when Class
-        case pat
-        when eq(Numeric); path('\\d+(?:\\.\\d+)?').call
-        when eq(Integer); path('\\d+').call
-        when eq(String); path('[^\\/]+').call
-        end
+      when eq(Numeric); path('\\d+(?:\\.\\d+)?').call
+      when eq(Integer); path('\\d+').call
+      when eq(String); path('[^\\/]+').call
       when String, Numeric; path(pat).call
       when Regexp; path(pat.source).call
       when true, false; pat
