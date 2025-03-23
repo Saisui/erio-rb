@@ -48,12 +48,16 @@ class << Erio
     end
   
     def match(pat)
+      def eq obj
+        -> { _1 == obj }
+      end
+
       case pat
       when Class
         case pat
-        when Numeric; path('\\d+(?:\\.\\d+)?').call
-        when Integer; path('\\d+').call
-        when String; path('[^\\/]+').call
+        when eq Numeric; path('\\d+(?:\\.\\d+)?').call
+        when eq Integer; path('\\d+').call
+        when eq String; path('[^\\/]+').call
         end
       when String, Numeric; path(pat).call
       when Regexp; path(pat.source).call
