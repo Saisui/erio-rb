@@ -4,6 +4,12 @@ A very chubby, tiny and lightweight Web Framework(base on Rack)
 
 凄く小さいなウェブ・フラムワーク。
 
+<style>
+  [cols-2] { column-count: 2 }
+  [cols-3] { column-count: 3 }
+  [cols-4] { column-count: 4 }
+</style>
+
 ## インストール :: Installation
 
 ```bash
@@ -80,14 +86,80 @@ Erio.run!
 
 ### 迷う宮ノ様な回路ニ作ろう :: Nested Page Sugar
 
+
 複雑ノ回路もサポートします。
 同じのコードを繰り返し書き込みの面倒も遠慮なく。
 
-<style>
-  [cols-2] { column-count: 2 }
-  [cols-3] { column-count: 3 }
-  [cols-4] { column-count: 4 }
-</style>
+<figure cols-2>
+
+タイプ·Ｍ
+
+```yaml
+- user
+  - 123
+    - album
+      - 23
+```
+
+タイプ·Ｓ
+
+```yaml
+- /user
+- /user/123
+- /user/123/album
+- /user/123/album/23
+
+```
+
+</figure>
+
+そして、処理に引きされば...
+
+<figure cols-2>
+
+タイプ·Ｍ
+
+```yaml
+- user
+  # 処理 user
+  - ''
+      # 処理
+  - 123
+    # 処理 123
+    - ''
+      # 処理
+    - album
+      # 処理 album
+      # 処理
+      - 23
+        # 処理 23
+```
+
+タイプ·Ｓ
+
+```yaml
+- /user
+  # 処理 user
+- /user/123
+  # 処理 user
+  # 処理 123
+- /user/123/album
+  # 処理 user
+  # 処理 123
+  # 処理 album
+- /user/123/album/23
+  # 処理 user
+  # 処理 123
+  # 処理 album
+  # 処理 23
+
+```
+
+</figure>
+
+#### 実のコードご覧。
+
+
 <figure cols-2>
 
 回路ニ使える
