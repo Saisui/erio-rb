@@ -1,7 +1,12 @@
 require './lib/erio'
-
+require 'securerandom'
+require 'rack/session'
+use Rack::Session::Cookie, secret: SecureRandom.hex(64)
 class App < Erio
   enter do
+    req.session['count'] ||= 0
+    req.session['count'] += 1
+    res.write "session/count: #{req.session['count']}\n"
     is do
       res.write 'home'
     end

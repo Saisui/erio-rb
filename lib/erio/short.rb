@@ -45,7 +45,7 @@ class << Erio
   def status s=nil; s ? @status=s : @status end
   def path; @env['REQUEST_PATH'] end
   def path? pattern=nil; block_given? ? (yield if pattern === path) : pattern === path end
-  def verb word=nil; block_given? ? (yield if verb == word) : @env['REQUEST_METHOD'] end
+  def verb word=nil; block_given? ? (yield if verb == word.to_s.upcase) : (word ? (@env['REQUEST_METHOD'] == word.to_s.upcase) : @env['REQUEST_METHOD']) end
   def body str=nil; str ? @body=str : @body end
   def accept; @env['HTTP_ACCEPT'] end
 

@@ -64,15 +64,15 @@ class << Erio
     end
   end
 
-  def _call env
-    @_env = env
-    @header = {}
-    @status = nil
-    @body = nil
-    last_res = enter
-    @body ||= last_res || ''
-    [@status, @header, [@body]]
-  end
+  # def _call env
+  #   @_env = env
+  #   @header = {}
+  #   @status = nil
+  #   @body = nil
+  #   last_res = enter
+  #   @body ||= last_res || ''
+  #   [@status, @header, [@body]]
+  # end
 
   # create a dup to indiv variables scope
   # and call its enter.
@@ -93,3 +93,5 @@ class << Erio
 end
 
 require_relative "erio/short"
+require_relative "erio/topo"
+require_relative "erio/kaki"
